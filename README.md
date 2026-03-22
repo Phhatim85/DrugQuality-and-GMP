@@ -1,1 +1,0 @@
-# DrugQuality-and-GMP
