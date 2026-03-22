@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تصميم المصانع الدوائية وفق WHO-GMP — تقرير</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════
+   SCREEN STYLES (preview)
+═══════════════════════════════ */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --green:   #1e5c3a;
+  --green2:  #2d7a52;
+  --green3:  #e8f5ee;
+  --gold:    #c4922a;
+  --gold2:   #fff3dc;
+  --blue:    #1a3f6f;
+  --blue2:   #e8f0fb;
+  --red:     #c0392b;
+  --red2:    #fdf0ee;
+  --purple:  #6c3483;
+  --purple2: #f4ecfb;
+  --teal:    #0e6655;
+  --ink:     #1a1714;
+  --ink2:    #3d3530;
+  --muted:   #7a6e66;
+  --rule:    #ddd7cc;
+  --bg:      #f9f7f3;
+}
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #e5e0d8;
+  color: var(--ink);
+  padding: 24px;
+}
+
+/* PRINT BUTTON (screen only) */
+.print-btn {
+  position: fixed; top: 20px; left: 20px; z-index: 100;
+  background: var(--green); color: #fff; border: none;
+  padding: 12px 24px; border-radius: 8px;
+  font-family: 'Cairo', sans-serif; font-size: .9rem;
+  font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(30,92,58,.4);
+  display: flex; align-items: center; gap: 8px;
+  transition: all .2s;
+}
+.print-btn:hover { background: var(--green2); transform: translateY(-2px); }
+
+/* ═══════════════════════════════
+   PAGE (A4)
+═══════════════════════════════ */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.15);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* ─── PAGE 1: COVER ─── */
+.cover {
+  width: 100%; height: 297mm;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+}
+
+.cover-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, #0d2a1a 0%, #1e5c3a 45%, #0a1f12 100%);
+}
+
+/* Decorative circles */
+.cover-bg::before {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.07);
+  top: -80px; left: -80px;
+}
+.cover-bg::after {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.04);
+  top: -150px; left: -150px;
+}
+
+.cover-content {
+  position: relative; z-index: 2;
+  flex: 1; display: flex; flex-direction: column;
+  padding: 14mm 16mm;
+}
+
+/* Top bar */
+.cover-topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 10mm;
+  border-bottom: 1px solid rgba(255,255,255,.15);
+  margin-bottom: 10mm;
+}
+.cover-platform {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 9pt; font-weight: 700;
+  color: rgba(255,255,255,.7);
+  letter-spacing: .5px;
+}
+.cover-series {
+  font-size: 7.5pt; color: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.08);
+  padding: 3px 10px; border-radius: 50px;
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+/* Pill illustration */
+.cover-illustration {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Cover main text */
+.cover-main {
+  padding-top: 8mm;
+}
+.cover-category {
+  font-size: 8pt; font-weight: 700;
+  color: #7dd4a8; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 6mm;
+  display: flex; align-items: center; gap: 8px;
+}
+.cover-category::before {
+  content: ''; display: block;
+  width: 24px; height: 2px; background: #7dd4a8;
+}
+.cover-title {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 26pt; font-weight: 900;
+  color: #fff; line-height: 1.25;
+  margin-bottom: 5mm;
+}
+.cover-subtitle {
+  font-size: 11pt; color: rgba(255,255,255,.65);
+  line-height: 1.7; margin-bottom: 10mm;
+  max-width: 140mm;
+}
+.cover-tags {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10mm;
+}
+.cover-tag {
+  font-size: 7.5pt; font-weight: 700;
+  padding: 3px 10px; border-radius: 50px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.8);
+}
+
+/* Cover meta */
+.cover-meta {
+  padding-top: 8mm;
+  border-top: 1px solid rgba(255,255,255,.12);
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.cover-meta-left { font-size: 8pt; color: rgba(255,255,255,.5); line-height: 1.7; }
+.cover-meta-left strong { color: rgba(255,255,255,.8); }
+.cover-who-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 8px; padding: 6px 12px;
+}
+.cover-who-badge span { font-size: 8pt; color: rgba(255,255,255,.7); font-weight: 700; }
+
+/* ─── INNER PAGES ─── */
+.inner-page {
+  width: 100%;
+  min-height: 297mm;
+  padding: 12mm 16mm;
+  position: relative;
+  page-break-before: always;
+}
+
+/* Page header */
+.page-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 5mm; margin-bottom: 8mm;
+  border-bottom: 2px solid var(--green);
+}
+.ph-platform {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 8pt; font-weight: 800; color: var(--green);
+}
+.ph-title {
+  font-size: 7.5pt; color: var(--muted);
+}
+.ph-page {
+  font-size: 7.5pt; color: var(--muted);
+  background: var(--bg); padding: 2px 8px; border-radius: 4px;
+}
+
+/* Section heading */
+.sec-num {
+  font-size: 7pt; letter-spacing: 2px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 3mm;
+}
+.sec-title {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 16pt; font-weight: 900; color: var(--ink);
+  margin-bottom: 4mm; line-height: 1.3;
+}
+.sec-lead {
+  font-size: 9.5pt; color: var(--ink2); line-height: 1.9;
+  margin-bottom: 7mm; max-width: 160mm;
+}
+
+/* WHO quote */
+.who-quote {
+  background: linear-gradient(135deg, #e8f5ee, #f0f8f4);
+  border-right: 4px solid var(--green);
+  border-radius: 0 8px 8px 0;
+  padding: 5mm 6mm;
+  margin: 6mm 0;
+  position: relative;
+}
+.who-quote::before {
+  content: '"';
+  position: absolute; top: -4mm; right: 4mm;
+  font-size: 40pt; color: rgba(30,92,58,.12);
+  font-family: Georgia, serif; line-height: 1;
+}
+.who-quote p {
+  font-size: 9.5pt; font-style: italic;
+  color: var(--ink); line-height: 1.7;
+}
+.who-quote cite {
+  display: block; margin-top: 2mm;
+  font-size: 7.5pt; color: var(--green); font-style: normal; font-weight: 700;
+}
+
+/* ═══════════════════════════════
+   INFOGRAPHICS
+═══════════════════════════════ */
+
+/* Contamination 3-box */
+.infog-3col {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 4mm; margin: 6mm 0;
+}
+.infog-box {
+  border-radius: 8px; padding: 5mm;
+  border: 1px solid transparent;
+}
+.infog-box .ib-icon { font-size: 20pt; margin-bottom: 3mm; display: block; }
+.infog-box .ib-title { font-family:'Tajawal',sans-serif; font-size: 10pt; font-weight: 800; margin-bottom: 2mm; }
+.infog-box .ib-body { font-size: 8pt; line-height: 1.6; color: var(--ink2); }
+
+.ib-red { background: var(--red2); border-color: #f5b7b1; }
+.ib-red .ib-title { color: var(--red); }
+.ib-gold { background: var(--gold2); border-color: #f9e4b5; }
+.ib-gold .ib-title { color: #a07020; }
+.ib-blue { background: var(--blue2); border-color: #c5d8f5; }
+.ib-blue .ib-title { color: var(--blue); }
+
+/* Zones flow */
+.zones-flow { margin: 6mm 0; }
+.zone-row {
+  display: flex; align-items: stretch;
+  margin-bottom: 2.5mm;
+  border-radius: 6px; overflow: hidden;
+  border: 1px solid var(--rule);
+}
+.zone-label {
+  width: 22mm; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 7.5pt; font-weight: 800; color: #fff;
+  padding: 3mm;
+  text-align: center; line-height: 1.3;
+}
+.zone-body {
+  flex: 1; padding: 3mm 5mm;
+  background: #fff; display: flex; align-items: center;
+}
+.zone-name { font-family:'Tajawal',sans-serif; font-size: 9.5pt; font-weight: 800; color: var(--ink); }
+.zone-desc { font-size: 7.5pt; color: var(--muted); margin-top: 1mm; }
+.zone-iso {
+  margin-right: auto; font-size: 7pt; font-weight: 800;
+  padding: 2px 8px; border-radius: 4px;
+  background: var(--bg); color: var(--muted);
+  border: 1px solid var(--rule); white-space: nowrap; margin-left: 4mm;
+}
+
+/* HVAC table */
+.data-table {
+  width: 100%; border-collapse: collapse; margin: 6mm 0;
+  font-size: 8.5pt;
+}
+.data-table thead th {
+  background: var(--green); color: #fff;
+  padding: 3mm 4mm; text-align: right;
+  font-weight: 700; font-size: 8pt;
+}
+.data-table tbody td {
+  padding: 3mm 4mm; border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+}
+.data-table tbody tr:nth-child(even) td { background: var(--bg); }
+.grade-a { color: var(--red); font-weight: 800; }
+.grade-b { color: #d35400; font-weight: 800; }
+.grade-c { color: #d4ac0d; font-weight: 800; }
+.grade-d { color: var(--teal); font-weight: 800; }
+
+/* Materials grid */
+.mat-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3mm; margin: 5mm 0;
+}
+.mat-item {
+  display: flex; gap: 3mm; align-items: flex-start;
+  background: var(--bg); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 3.5mm;
+}
+.mat-icon { font-size: 14pt; flex-shrink: 0; }
+.mat-name { font-family:'Tajawal',sans-serif; font-size: 9pt; font-weight: 800; color: var(--ink); margin-bottom: 1mm; }
+.mat-spec { font-size: 7.5pt; color: var(--muted); line-height: 1.5; }
+
+/* Water flow */
+.water-flow {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; margin: 6mm 0;
+}
+.water-stage {
+  border-radius: 8px; padding: 4mm 5mm;
+  text-align: center; border: 1px solid var(--rule);
+  min-width: 45mm;
+}
+.water-stage .ws-level { font-size: 7pt; font-weight: 700; letter-spacing: 1px; margin-bottom: 1.5mm; }
+.water-stage .ws-name { font-family:'Tajawal',sans-serif; font-size: 9pt; font-weight: 800; margin-bottom: 1.5mm; }
+.water-stage .ws-spec { font-size: 7pt; color: var(--muted); line-height: 1.5; }
+.ws-1 { background: #f5f5f5; }
+.ws-1 .ws-level { color: var(--muted); }
+.ws-2 { background: var(--blue2); border-color: #b8d0f0; }
+.ws-2 .ws-level { color: var(--blue); }
+.ws-3 { background: var(--red2); border-color: #f5c6c0; }
+.ws-3 .ws-level { color: var(--red); }
+.water-arrow {
+  width: 10mm; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14pt; color: var(--muted);
+}
+
+/* Qualification cycle */
+.qual-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 3mm; margin: 6mm 0;
+}
+.qual-box {
+  border-radius: 8px; padding: 4mm;
+  position: relative; overflow: hidden;
+  border: 1px solid transparent;
+}
+.qual-code {
+  font-family:'Tajawal',sans-serif;
+  font-size: 18pt; font-weight: 900;
+  opacity: .15; position: absolute; top: 1mm; left: 2mm; line-height: 1;
+}
+.qual-title { font-family:'Tajawal',sans-serif; font-size: 9pt; font-weight: 800; margin-bottom: 1.5mm; position: relative; z-index:1; }
+.qual-desc { font-size: 7.5pt; color: var(--ink2); line-height: 1.55; position: relative; z-index:1; }
+.qb-1 { background: #e8f5ee; border-color: #b8dfc8; }
+.qb-1 .qual-code,.qb-1 .qual-title { color: var(--green); }
+.qb-2 { background: var(--blue2); border-color: #b8d0f0; }
+.qb-2 .qual-code,.qb-2 .qual-title { color: var(--blue); }
+.qb-3 { background: var(--gold2); border-color: #f0d890; }
+.qb-3 .qual-code,.qb-3 .qual-title { color: var(--gold); }
+.qb-4 { background: var(--purple2); border-color: #d4b8e8; }
+.qb-4 .qual-code,.qb-4 .qual-title { color: var(--purple); }
+
+/* Key takeaways */
+.takeaways {
+  background: linear-gradient(135deg, #0d2a1a, #1e5c3a);
+  border-radius: 10px; padding: 7mm;
+  margin: 6mm 0;
+}
+.takeaways h3 {
+  font-family:'Tajawal',sans-serif; font-size: 12pt; font-weight: 900;
+  color: #fff; margin-bottom: 4mm;
+}
+.tk-list { list-style: none; }
+.tk-list li {
+  display: flex; gap: 3mm; align-items: flex-start;
+  font-size: 9pt; color: rgba(255,255,255,.85); line-height: 1.7;
+  margin-bottom: 3mm;
+}
+.tk-num {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  font-size: 7pt; font-weight: 800; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+
+/* HVAC requirements checklist */
+.checklist-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2.5mm; margin: 5mm 0;
+}
+.chk-item {
+  display: flex; gap: 3mm; align-items: flex-start;
+  background: var(--bg); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 3mm;
+}
+.chk-box {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--green); color: #fff;
+  font-size: 7pt; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.chk-text { font-size: 8pt; color: var(--ink2); line-height: 1.55; }
+
+/* PAGE FOOTER */
+.page-footer {
+  position: absolute; bottom: 8mm; left: 16mm; right: 16mm;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--rule); padding-top: 3mm;
+}
+.pf-text { font-size: 7pt; color: var(--muted); }
+.pf-dots { display: flex; gap: 3px; }
+.pf-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--rule); }
+.pf-dot.on { background: var(--green); }
+
+/* divider */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--green), rgba(30,92,58,0));
+  margin: 5mm 0;
+}
+
+/* inline highlight */
+.hl-green { color: var(--green); font-weight: 700; }
+.hl-blue { color: var(--blue); font-weight: 700; }
+.hl-red { color: var(--red); font-weight: 700; }
+.hl-gold { color: var(--gold); font-weight: 700; }
+
+/* ═══════════════════════════════
+   PRINT STYLES
+═══════════════════════════════ */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    background: white;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+  .print-btn { display: none !important; }
+  .page {
+    box-shadow: none;
+    margin: 0;
+    width: 210mm;
+  }
+  .inner-page {
+    page-break-before: always;
+  }
+  .cover {
+    page-break-after: always;
+  }
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">
+  🖨️ طباعة / حفظ كـ PDF
+</button>
+
+<!-- ═══════════════════════
+     PAGE 1 — COVER
+═══════════════════════ -->
+<div class="page">
+<div class="cover">
+  <div class="cover-bg"></div>
+  <div class="cover-content">
+
+    <!-- Top bar -->
+    <div class="cover-topbar">
+      <div class="cover-platform">جودة الدواء والممارسات الجيدة في الصناعات الدوائية</div>
+      <div class="cover-series">الركيزة الأولى · منظومة GMP الدولية</div>
+    </div>
+
+    <!-- Illustration — pill + globe SVG -->
+    <div class="cover-illustration">
+      <svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" style="width:160mm;height:auto;">
+        <defs>
+          <radialGradient id="cg1" cx="50%" cy="40%" r="50%">
+            <stop offset="0%" stop-color="#2d7a52"/><stop offset="100%" stop-color="#0d3322"/>
+          </radialGradient>
+          <clipPath id="pillClip">
+            <rect x="100" y="52" width="160" height="56" rx="28"/>
+          </clipPath>
+        </defs>
+        <!-- Globe -->
+        <circle cx="180" cy="80" r="72" fill="url(#cg1)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+        <g clip-path="url(#pillClip)" fill="none" stroke="rgba(255,255,255,.18)" stroke-width=".7">
+          <ellipse cx="180" cy="80" rx="72" ry="72"/>
+          <ellipse cx="180" cy="80" rx="72" ry="30"/>
+          <ellipse cx="180" cy="80" rx="72" ry="55"/>
+          <line x1="180" y1="8" x2="180" y2="152"/>
+          <ellipse cx="180" cy="80" rx="35" ry="72"/>
+          <ellipse cx="180" cy="80" rx="58" ry="72"/>
+        </g>
+        <circle cx="180" cy="80" r="72" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+        <!-- Pill on top -->
+        <rect x="100" y="52" width="160" height="56" rx="28" fill="#0d1f14" stroke="rgba(125,212,168,.5)" stroke-width="1.5"/>
+        <rect x="100" y="52" width="80" height="56" rx="0" fill="#7dd4a8" opacity=".85"/>
+        <rect x="100" y="52" width="80" height="56" rx="28" fill="#7dd4a8" opacity=".85"/>
+        <rect x="100" y="52" width="160" height="56" rx="28" fill="none" stroke="rgba(125,212,168,.5)" stroke-width="1.5"/>
+        <!-- Pill shine -->
+        <ellipse cx="130" cy="68" rx="22" ry="9" fill="white" opacity=".18"/>
+        <!-- Labels -->
+        <text x="140" y="83" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" font-weight="900" fill="#0d1f14">GMP</text>
+        <text x="220" y="78" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" font-weight="700" fill="rgba(255,255,255,.8)">Quality</text>
+        <text x="220" y="90" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="rgba(255,255,255,.55)">Assurance</text>
+        <!-- Orbiting badges -->
+        <g fill="none">
+          <circle cx="180" cy="12" r="14" fill="#1e5c3a" stroke="rgba(125,212,168,.4)" stroke-width="1"/>
+          <text x="180" y="17" text-anchor="middle" font-family="Cairo,sans-serif" font-size="7" font-weight="700" fill="#7dd4a8">WHO</text>
+          <circle cx="290" cy="50" r="14" fill="#1a3f6f" stroke="rgba(100,160,255,.4)" stroke-width="1"/>
+          <text x="290" y="55" text-anchor="middle" font-family="Cairo,sans-serif" font-size="7" font-weight="700" fill="#8ab8ff">ICH</text>
+          <circle cx="295" cy="118" r="14" fill="#6c3483" stroke="rgba(200,150,255,.4)" stroke-width="1"/>
+          <text x="295" y="121" text-anchor="middle" font-family="Cairo,sans-serif" font-size="6.5" font-weight="700" fill="#d4aaff">ISO</text>
+          <circle cx="70" cy="50" r="14" fill="#8b4513" stroke="rgba(255,200,100,.4)" stroke-width="1"/>
+          <text x="70" y="53" text-anchor="middle" font-family="Cairo,sans-serif" font-size="5.5" font-weight="700" fill="#ffd080">PIC/S</text>
+          <circle cx="65" cy="118" r="14" fill="#0e6655" stroke="rgba(100,220,180,.4)" stroke-width="1"/>
+          <text x="65" y="121" text-anchor="middle" font-family="Cairo,sans-serif" font-size="5.5" font-weight="700" fill="#80e8c8">FDA/EMA</text>
+          <!-- connecting lines -->
+          <line x1="180" y1="26" x2="180" y2="52" stroke="rgba(255,255,255,.12)" stroke-dasharray="3,3"/>
+          <line x1="277" y1="58" x2="260" y2="67" stroke="rgba(255,255,255,.12)" stroke-dasharray="3,3"/>
+          <line x1="283" y1="108" x2="260" y2="101" stroke="rgba(255,255,255,.12)" stroke-dasharray="3,3"/>
+          <line x1="82" y1="58" x2="100" y2="67" stroke="rgba(255,255,255,.12)" stroke-dasharray="3,3"/>
+          <line x1="78" y1="108" x2="100" y2="101" stroke="rgba(255,255,255,.12)" stroke-dasharray="3,3"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Main text -->
+    <div class="cover-main">
+      <div class="cover-category">منظومة GMP الدولية</div>
+      <h1 class="cover-title">تصميم المصانع الدوائية<br>وفق متطلبات<br>منظمة الصحة العالمية</h1>
+      <p class="cover-subtitle">
+        دليل تفاعلي شامل — من تصميم Cleanrooms وأنظمة HVAC إلى إدارة المياه ودورة التحقق الكاملة،
+        استناداً إلى WHO Technical Report Series وإرشادات ISO 14644.
+      </p>
+      <div class="cover-tags">
+        <span class="cover-tag">WHO-GMP</span>
+        <span class="cover-tag">Cleanroom</span>
+        <span class="cover-tag">HVAC</span>
+        <span class="cover-tag">Water for Injection</span>
+        <span class="cover-tag">Qualification</span>
+        <span class="cover-tag">PIC/S</span>
+      </div>
+    </div>
+
+    <!-- Bottom meta -->
+    <div class="cover-meta">
+      <div class="cover-meta-left">
+        <strong>المرجع:</strong> WHO Technical Report Series, No. 957, Annex 4<br>
+        <strong>المعيار:</strong> ISO 14644 · EU GMP Annex 1<br>
+        <strong>التصنيف:</strong> تصميم منشآت · رقابة جودة
+      </div>
+      <div class="cover-who-badge">
+        <span style="font-size:16pt;">🏭</span>
+        <span>تقرير علمي<br>مرجعي</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════
+     PAGE 2 — PRINCIPLES + CONTAMINATION
+═══════════════════════ -->
+<div class="page">
+<div class="inner-page">
+  <div class="page-header">
+    <div class="ph-platform">جودة الدواء والممارسات الجيدة في الصناعات الدوائية</div>
+    <div class="ph-title">تصميم المصانع الدوائية وفق WHO-GMP</div>
+    <div class="ph-page">2 / 4</div>
+  </div>
+
+  <!-- S1 -->
+  <div class="sec-num">01 — المبدأ الجوهري</div>
+  <h2 class="sec-title">الوقاية من التلوث — ثالوث التصميم</h2>
+  <p class="sec-lead">
+    كل قرار معماري في المصنع الدوائي يجب أن يُحارب أحد أنواع التلوث الثلاثة.
+    هذا ليس مجرد توجيه — بل شرط أساسي لأي مصنع يسعى للاعتماد الدولي.
+  </p>
+
+  <div class="who-quote">
+    <p>"التصميم يجب أن يُقلل من مخاطر الأخطاء ويُتيح التنظيف والصيانة الفعّالة لمنع التلوث المتقاطع وتراكم الغبار والأوساخ"</p>
+    <cite>— WHO Technical Report Series, No. 957, Annex 4</cite>
+  </div>
+
+  <!-- Infographic: 3 contamination types -->
+  <div class="infog-3col">
+    <div class="infog-box ib-red">
+      <span class="ib-icon">⚗️</span>
+      <div class="ib-title">تلوث متقاطع</div>
+      <div class="ib-body">
+        <strong>المصدر:</strong> انتقال مادة فعّالة من منتج لآخر<br>
+        <strong>الحل:</strong> فصل المناطق + تدفق هواء أحادي + ضغط تفاضلي
+      </div>
+    </div>
+    <div class="infog-box ib-gold">
+      <span class="ib-icon">🦠</span>
+      <div class="ib-title">تلوث ميكروبي</div>
+      <div class="ib-body">
+        <strong>المصدر:</strong> البكتيريا والفطريات والجسيمات البيولوجية<br>
+        <strong>الحل:</strong> Cleanrooms + HEPA 99.97% + مراقبة بيئية
+      </div>
+    </div>
+    <div class="infog-box ib-blue">
+      <span class="ib-icon">💨</span>
+      <div class="ib-title">تلوث جسيمي</div>
+      <div class="ib-body">
+        <strong>المصدر:</strong> جسيمات عالقة من المواد والموظفين<br>
+        <strong>الحل:</strong> HVAC متخصص + أسطح ملساء + زوايا Coved
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- S2 -->
+  <div class="sec-num">02 — التخطيط المناطقي</div>
+  <h2 class="sec-title">تقسيم المناطق — من العام إلى فائق النظافة</h2>
+  <p class="sec-lead">
+    يشترط WHO تدفقاً أحادياً للمواد والموظفين والنفايات. المصنع يُقسَّم إلى أربع مناطق بمتطلبات متصاعدة.
+  </p>
+
+  <div class="zones-flow">
+    <div class="zone-row">
+      <div class="zone-label" style="background:#7f8c8d;">Zone 1<br>عامة</div>
+      <div class="zone-body">
+        <div style="flex:1">
+          <div class="zone-name">المنطقة العامة — Uncontrolled Area</div>
+          <div class="zone-desc">المداخل، المكاتب، غرف الاجتماعات · لا قيود خاصة على البيئة</div>
+        </div>
+        <div class="zone-iso">لا قيود</div>
+      </div>
+    </div>
+    <div class="zone-row">
+      <div class="zone-label" style="background:#2980b9;">Zone 2<br>متحكم بها</div>
+      <div class="zone-body">
+        <div style="flex:1">
+          <div class="zone-name">المنطقة المتحكم بها — Controlled Area</div>
+          <div class="zone-desc">مخازن المواد الخام والمنتج النهائي · 15-25°C · رطوبة 40-60%</div>
+        </div>
+        <div class="zone-iso">15-25°C</div>
+      </div>
+    </div>
+    <div class="zone-row">
+      <div class="zone-label" style="background:#d68910;">Zone 3<br>نظيفة</div>
+      <div class="zone-body">
+        <div style="flex:1">
+          <div class="zone-name">المنطقة النظيفة — Clean Area</div>
+          <div class="zone-desc">تحضير المنتجات غير المعقمة · 20+ تجديد هواء/ساعة</div>
+        </div>
+        <div class="zone-iso">ISO 8 / Grade D</div>
+      </div>
+    </div>
+    <div class="zone-row">
+      <div class="zone-label" style="background:#c0392b;">Zone 4<br>Cleanroom</div>
+      <div class="zone-body">
+        <div style="flex:1">
+          <div class="zone-name">المنطقة فائقة النظافة — Cleanroom</div>
+          <div class="zone-desc">تصنيع الحقن والمنتجات المعقمة · Laminar Flow · ≤ 3,520 جسيم/م³</div>
+        </div>
+        <div class="zone-iso" style="color:#c0392b;background:#fdf0ee;border-color:#f5b7b1;">ISO 5 / Grade A</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="pf-text">جودة الدواء والممارسات الجيدة في الصناعات الدوائية</div>
+    <div class="pf-dots">
+      <div class="pf-dot on"></div><div class="pf-dot on"></div>
+      <div class="pf-dot"></div><div class="pf-dot"></div>
+    </div>
+    <div class="pf-text">الصفحة 2 من 4</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════
+     PAGE 3 — HVAC + MATERIALS + WATER
+═══════════════════════ -->
+<div class="page">
+<div class="inner-page">
+  <div class="page-header">
+    <div class="ph-platform">جودة الدواء والممارسات الجيدة في الصناعات الدوائية</div>
+    <div class="ph-title">تصميم المصانع الدوائية وفق WHO-GMP</div>
+    <div class="ph-page">3 / 4</div>
+  </div>
+
+  <!-- S3 HVAC -->
+  <div class="sec-num">03 — أنظمة HVAC</div>
+  <h2 class="sec-title">معايير نظافة الهواء — ISO 14644</h2>
+  <p class="sec-lead">نظام HVAC هو الأكثر تأثيراً على قرار الاعتماد — يمثل 30-40% من تكلفة المصنع.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>درجة النظافة</th>
+        <th>الاستخدام</th>
+        <th>جسيمات / م³ (0.5µm)</th>
+        <th>الحمل الميكروبي</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="grade-a">ISO 5 / Grade A</span></td>
+        <td>التعبئة المعقمة المكشوفة</td>
+        <td><strong>≤ 3,520</strong></td>
+        <td>&lt; 1 CFU/م³</td>
+      </tr>
+      <tr>
+        <td><span class="grade-b">ISO 6 / Grade B</span></td>
+        <td>خلفية Grade A للتعقيم</td>
+        <td><strong>≤ 35,200</strong></td>
+        <td>≤ 10 CFU/م³</td>
+      </tr>
+      <tr>
+        <td><span class="grade-c">ISO 7 / Grade C</span></td>
+        <td>تحضير المحاليل القابلة للترشيح</td>
+        <td><strong>≤ 352,000</strong></td>
+        <td>≤ 100 CFU/م³</td>
+      </tr>
+      <tr>
+        <td><span class="grade-d">ISO 8 / Grade D</span></td>
+        <td>أعمال أقل حساسية</td>
+        <td><strong>≤ 3,520,000</strong></td>
+        <td>≤ 200 CFU/م³</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="checklist-grid">
+    <div class="chk-item"><div class="chk-box">✓</div><div class="chk-text">معدل تجديد الهواء ≥ 20 دورة/ساعة في المناطق المتحكمة</div></div>
+    <div class="chk-item"><div class="chk-box">✓</div><div class="chk-text">فلاتر HEPA بكفاءة 99.97% لجسيمات 0.3 ميكرون</div></div>
+    <div class="chk-item"><div class="chk-box">✓</div><div class="chk-text">ضغط تفاضلي 10-15 Pascal بين المناطق المختلفة</div></div>
+    <div class="chk-item"><div class="chk-box">✓</div><div class="chk-text">اختبار نزاهة فلاتر HEPA كل 6 أشهر على الأقل</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- S4 Materials -->
+  <div class="sec-num">04 — مواد البناء</div>
+  <h2 class="sec-title">التشطيبات الداخلية — متطلبات WHO الأساسية</h2>
+
+  <div class="mat-grid">
+    <div class="mat-item">
+      <div class="mat-icon">🏗️</div>
+      <div><div class="mat-name">الأرضيات</div><div class="mat-spec">إيبوكسي أو PU Screed · 3-6 مم · مضاد للانزلاق · لا شقوق</div></div>
+    </div>
+    <div class="mat-item">
+      <div class="mat-icon">🧱</div>
+      <div><div class="mat-name">الجدران</div><div class="mat-spec">Sandwich Panel أو طلاء إيبوكسي · سطح أملس مقاوم للرطوبة</div></div>
+    </div>
+    <div class="mat-item">
+      <div class="mat-icon">🔲</div>
+      <div><div class="mat-name">الأسقف</div><div class="mat-spec">Flush Ceiling مغلق بالكامل · إضاءة مدفونة · لا فجوات</div></div>
+    </div>
+    <div class="mat-item">
+      <div class="mat-icon">🚪</div>
+      <div><div class="mat-name">الأبواب</div><div class="mat-spec">ذاتية الإغلاق · حشوات مانعة · Interlocking في Grade A/B</div></div>
+    </div>
+    <div class="mat-item">
+      <div class="mat-icon">🔄</div>
+      <div><div class="mat-name">الزوايا المنحنية</div><div class="mat-spec">Coved Corners بنصف قطر ≥ 5 سم · تمنع تراكم الغبار</div></div>
+    </div>
+    <div class="mat-item">
+      <div class="mat-icon">💡</div>
+      <div><div class="mat-name">الإضاءة</div><div class="mat-spec">مدفونة مع حماية كاملة · ≥ 300 lux في مناطق الإنتاج</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- S5 Water -->
+  <div class="sec-num">05 — أنظمة المياه</div>
+  <h2 class="sec-title">الماء في الصناعة الدوائية — مادة خام أولى</h2>
+
+  <div class="water-flow">
+    <div class="water-stage ws-1">
+      <div class="ws-level" style="color:#7f8c8d;">المرحلة الأولى</div>
+      <div class="ws-name">Potable Water</div>
+      <div class="ws-spec">ماء الصنبور<br>للتنظيف الأولي فقط</div>
+    </div>
+    <div class="water-arrow">→</div>
+    <div class="water-stage ws-2">
+      <div class="ws-level" style="color:var(--blue);">المرحلة الثانية</div>
+      <div class="ws-name">Purified Water</div>
+      <div class="ws-spec">موصلية ≤ 1.3 µS/cm<br>TOC ≤ 500 ppb</div>
+    </div>
+    <div class="water-arrow">→</div>
+    <div class="water-stage ws-3">
+      <div class="ws-level" style="color:var(--red);">المرحلة الثالثة</div>
+      <div class="ws-name">Water for Injection</div>
+      <div class="ws-spec">موصلية ≤ 1.1 µS/cm<br>Endotoxin ≤ 0.25 EU/ml</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="pf-text">جودة الدواء والممارسات الجيدة في الصناعات الدوائية</div>
+    <div class="pf-dots">
+      <div class="pf-dot on"></div><div class="pf-dot on"></div>
+      <div class="pf-dot on"></div><div class="pf-dot"></div>
+    </div>
+    <div class="pf-text">الصفحة 3 من 4</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════
+     PAGE 4 — QUALIFICATION + TAKEAWAYS
+═══════════════════════ -->
+<div class="page">
+<div class="inner-page">
+  <div class="page-header">
+    <div class="ph-platform">جودة الدواء والممارسات الجيدة في الصناعات الدوائية</div>
+    <div class="ph-title">تصميم المصانع الدوائية وفق WHO-GMP</div>
+    <div class="ph-page">4 / 4</div>
+  </div>
+
+  <!-- S6 Qualification -->
+  <div class="sec-num">06 — دورة التحقق والمصادقة</div>
+  <h2 class="sec-title">Qualification &amp; Validation — إثبات الجدارة</h2>
+  <p class="sec-lead">
+    التصميم الجيد وحده لا يكفي — يجب وجود توثيق موثوق يُثبت أن المصنع يؤدي وظيفته.
+    تسير دورة التحقق في أربع مراحل متتالية إلزامية.
+  </p>
+
+  <div class="qual-grid">
+    <div class="qual-box qb-1">
+      <div class="qual-code">DQ</div>
+      <div class="qual-title">تحقق التصميم</div>
+      <div class="qual-desc">Design Qualification — التحقق من أن التصميم يلبي متطلبات GMP قبل البناء. مراجعة كاملة للمخططات.</div>
+    </div>
+    <div class="qual-box qb-2">
+      <div class="qual-code">IQ</div>
+      <div class="qual-title">تحقق التركيب</div>
+      <div class="qual-desc">Installation Qualification — التحقق من صحة تركيب المعدات والأنظمة وفق المواصفات.</div>
+    </div>
+    <div class="qual-box qb-3">
+      <div class="qual-code">OQ</div>
+      <div class="qual-title">تحقق التشغيل</div>
+      <div class="qual-desc">Operational Qualification — التحقق من عمل المعدات ضمن حدودها التصميمية باختبارات موثقة.</div>
+    </div>
+    <div class="qual-box qb-4">
+      <div class="qual-code">PQ</div>
+      <div class="qual-title">تحقق الأداء</div>
+      <div class="qual-desc">Performance Qualification — التحقق من الأداء الكامل في ظروف الإنتاج الحقيقية.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- S7 Infographic: Key Numbers -->
+  <div class="sec-num">07 — أرقام مفتاحية</div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:4mm 0 6mm;">
+    <div style="background:var(--green3);border:1px solid #b8dfc8;border-radius:8px;padding:4mm;text-align:center;">
+      <div style="font-family:'Tajawal',sans-serif;font-size:20pt;font-weight:900;color:var(--green);">4</div>
+      <div style="font-size:7.5pt;color:var(--green);font-weight:700;">مناطق ISO</div>
+    </div>
+    <div style="background:var(--blue2);border:1px solid #b8d0f0;border-radius:8px;padding:4mm;text-align:center;">
+      <div style="font-family:'Tajawal',sans-serif;font-size:20pt;font-weight:900;color:var(--blue);">20+</div>
+      <div style="font-size:7.5pt;color:var(--blue);font-weight:700;">تجديد هواء/ساعة</div>
+    </div>
+    <div style="background:var(--red2);border:1px solid #f5b7b1;border-radius:8px;padding:4mm;text-align:center;">
+      <div style="font-family:'Tajawal',sans-serif;font-size:20pt;font-weight:900;color:var(--red);">4</div>
+      <div style="font-size:7.5pt;color:var(--red);font-weight:700;">مراحل تحقق DQ→PQ</div>
+    </div>
+    <div style="background:var(--purple2);border:1px solid #d4b8e8;border-radius:8px;padding:4mm;text-align:center;">
+      <div style="font-family:'Tajawal',sans-serif;font-size:20pt;font-weight:900;color:var(--purple);">316L</div>
+      <div style="font-size:7.5pt;color:var(--purple);font-weight:700;">فولاذ أنابيب المياه</div>
+    </div>
+  </div>
+
+  <!-- Takeaways -->
+  <div class="takeaways">
+    <h3>🎯 الخلاصة — ما يُفرق بين مصنع معتمد ومصنع مرفوض</h3>
+    <ul class="tk-list">
+      <li>
+        <div class="tk-num">1</div>
+        <div>التصميم يأتي <strong style="color:#7dd4a8;">قبل</strong> البناء — كل قرار قبل الموافقة التنظيمية هو خسارة مضمونة. DQ أولاً، البناء ثانياً.</div>
+      </li>
+      <li>
+        <div class="tk-num">2</div>
+        <div>لا تُقلّص في <strong style="color:#7dd4a8;">HVAC والمياه</strong> — يمثلان 30-40% من تكلفة المصنع لكنهما يتحكمان في 80% من قرار الاعتماد.</div>
+      </li>
+      <li>
+        <div class="tk-num">3</div>
+        <div>الـ GMP ثقافة توثيق لكل قرار من أول رسمة هندسية — ليست مجرد مباني جميلة أو جدران بيضاء.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- References -->
+  <div style="margin-top:5mm;padding:4mm;background:var(--bg);border:1px solid var(--rule);border-radius:6px;">
+    <div style="font-size:7.5pt;font-weight:800;color:var(--ink);margin-bottom:2mm;">المراجع والمعايير</div>
+    <div style="font-size:7pt;color:var(--muted);line-height:1.8;">
+      • WHO Technical Report Series, No. 957, Annex 4 — WHO Good Manufacturing Practices for Pharmaceutical Products<br>
+      • ISO 14644-1:2015 — Cleanrooms and Associated Controlled Environments<br>
+      • EU GMP Annex 1:2022 — Manufacture of Sterile Medicinal Products<br>
+      • PIC/S PE 009 — Guide to Good Manufacturing Practice for Medicinal Products<br>
+      • ICH Q10 — Pharmaceutical Quality System
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="pf-text">جودة الدواء والممارسات الجيدة في الصناعات الدوائية</div>
+    <div class="pf-dots">
+      <div class="pf-dot on"></div><div class="pf-dot on"></div>
+      <div class="pf-dot on"></div><div class="pf-dot on"></div>
+    </div>
+    <div class="pf-text">الصفحة 4 من 4</div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

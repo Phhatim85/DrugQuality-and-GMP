@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تصميم المصانع الدوائية | WHO-GMP</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050d1a;
+    --bg2: #071225;
+    --surface: #0c1e35;
+    --surface2: #112540;
+    --border: #1a3a5c;
+    --accent: #00c8ff;
+    --accent2: #0077ff;
+    --accent3: #00ff9d;
+    --gold: #ffd166;
+    --text: #e8f4ff;
+    --muted: #7a9cbd;
+    --danger: #ff4d6d;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  /* ──── BACKGROUND EFFECTS ──── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(0,200,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(0,119,255,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(0,255,157,0.03) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Grid overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ──── HERO ──── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,200,255,0.1);
+    border: 1px solid rgba(0,200,255,0.3);
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    animation: fadeDown 0.8s ease forwards;
+  }
+
+  .hero-badge span { animation: pulse-dot 2s infinite; display: inline-block; width: 8px; height: 8px; background: var(--accent3); border-radius: 50%; }
+
+  .hero h1 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--muted);
+    max-width: 700px;
+    line-height: 1.8;
+    animation: fadeUp 1s ease 0.4s both;
+    margin-bottom: 48px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 1s ease 0.6s both;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    display: block;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    animation: bounce 2s infinite;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  /* ──── PROGRESS BAR ──── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent3), var(--accent), var(--accent2));
+    z-index: 1000;
+    transition: width 0.1s;
+    width: 0%;
+  }
+
+  /* ──── NAV ──── */
+  .toc-nav {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+  }
+
+  .toc-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .toc-dot:hover, .toc-dot.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  .toc-dot:hover .toc-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .toc-tooltip {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    color: var(--accent);
+  }
+
+  /* ──── SECTIONS ──── */
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-number {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .section-lead {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 48px;
+    max-width: 750px;
+  }
+
+  /* ──── QUOTE BLOCK ──── */
+  .who-quote {
+    background: linear-gradient(135deg, rgba(0,200,255,0.08), rgba(0,119,255,0.08));
+    border: 1px solid rgba(0,200,255,0.25);
+    border-right: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 28px 32px;
+    margin: 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .who-quote::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    font-size: 120px;
+    color: rgba(0,200,255,0.08);
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .who-quote p {
+    font-size: 1.1rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--text);
+    position: relative;
+    z-index: 1;
+  }
+
+  .who-quote cite {
+    display: block;
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-style: normal;
+    letter-spacing: 1px;
+  }
+
+  /* ──── CONTAMINATION CARDS ──── */
+  .contam-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 40px 0;
+  }
+
+  .contam-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s ease;
+  }
+
+  .contam-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--card-color, var(--accent)) 0%, transparent 60%);
+    opacity: 0.05;
+    transition: opacity 0.4s;
+  }
+
+  .contam-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--card-color, var(--accent));
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(0,200,255,0.1);
+  }
+
+  .contam-card:hover::before { opacity: 0.12; }
+
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--card-color, var(--accent));
+  }
+
+  .card-source {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .card-solution {
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.7;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ──── ZONE FLOW ──── */
+  .zone-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 40px 0;
+  }
+
+  .zone-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .zone-row::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--zone-color) 0%, transparent 40%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .zone-row:hover {
+    border-color: var(--zone-color);
+    transform: translateX(8px);
+  }
+
+  .zone-row:hover::after { opacity: 0.07; }
+
+  .zone-badge {
+    background: var(--zone-color, var(--accent));
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 50px;
+    white-space: nowrap;
+    min-width: 80px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .zone-info { flex: 1; position: relative; z-index: 1; }
+
+  .zone-name {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .zone-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .zone-iso {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--zone-color);
+    background: rgba(255,255,255,0.05);
+    padding: 4px 10px;
+    border-radius: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ──── HVAC TABLE ──── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 0.9rem;
+  }
+
+  .data-table th {
+    background: rgba(0,200,255,0.1);
+    color: var(--accent);
+    padding: 14px 18px;
+    text-align: right;
+    border-bottom: 2px solid var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .data-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .data-table tr:hover td {
+    background: rgba(0,200,255,0.04);
+  }
+
+  .grade-a { color: var(--danger); font-weight: 700; }
+  .grade-b { color: #ff9f43; font-weight: 700; }
+  .grade-c { color: var(--gold); font-weight: 700; }
+  .grade-d { color: var(--accent3); font-weight: 700; }
+
+  /* ──── INTERACTIVE PIPELINE ──── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+    margin: 40px 0;
+    overflow-x: auto;
+    padding: 20px 0;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .pipe-step {
+    flex: 1;
+    min-width: 130px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .pipe-step:hover, .pipe-step.active {
+    border-color: var(--accent);
+    background: rgba(0,200,255,0.08);
+    transform: scale(1.05);
+  }
+
+  .pipe-step .step-icon { font-size: 2rem; margin-bottom: 10px; }
+  .pipe-step .step-name { font-size: 0.8rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .pipe-step .step-sub { font-size: 0.7rem; color: var(--muted); }
+
+  .pipe-arrow {
+    color: var(--accent);
+    font-size: 1.5rem;
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  .pipe-detail {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 16px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .pipe-detail.show { display: block; }
+  .pipe-detail h4 { color: var(--accent); font-size: 1rem; margin-bottom: 12px; }
+  .pipe-detail p { color: var(--muted); font-size: 0.9rem; line-height: 1.8; }
+
+  /* ──── REQUIREMENTS CHECKLIST ──── */
+  .checklist {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 32px 0;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .check-item:hover {
+    border-color: var(--accent3);
+    background: rgba(0,255,157,0.05);
+  }
+
+  .check-icon {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s;
+    font-size: 14px;
+  }
+
+  .check-item.checked .check-icon {
+    background: var(--accent3);
+    border-color: var(--accent3);
+    color: #000;
+  }
+
+  .check-text { font-size: 0.9rem; line-height: 1.6; }
+
+  /* ──── WATER SYSTEM ──── */
+  .water-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 40px auto;
+    max-width: 500px;
+  }
+
+  .water-stage {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 28px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .water-stage:hover {
+    border-color: var(--stage-color, var(--accent));
+    box-shadow: 0 0 20px rgba(0,200,255,0.1);
+  }
+
+  .water-stage .stage-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--stage-color, var(--accent));
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .water-stage .stage-name {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .water-stage .stage-spec {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .water-arrow {
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2));
+    position: relative;
+  }
+
+  .water-arrow::after {
+    content: '▼';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--accent2);
+    font-size: 12px;
+  }
+
+  /* ──── QUALIFICATION CYCLE ──── */
+  .qual-cycle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin: 40px 0;
+    position: relative;
+  }
+
+  .qual-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    cursor: pointer;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .qual-step:first-child { border-radius: 16px 0 0 0; }
+  .qual-step:nth-child(2) { border-radius: 0 16px 0 0; }
+  .qual-step:nth-child(3) { border-radius: 0 0 0 16px; }
+  .qual-step:last-child { border-radius: 0 0 16px 0; }
+
+  .qual-step:hover, .qual-step.active {
+    background: var(--surface2);
+    border-color: var(--accent);
+  }
+
+  .qual-code {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: rgba(0,200,255,0.15);
+    font-family: 'Tajawal', sans-serif;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+  }
+
+  .qual-step.active .qual-code { color: rgba(0,200,255,0.3); }
+
+  .qual-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .qual-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ──── FINAL CARD ──── */
+  .final-section {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin: 60px 0;
+  }
+
+  .final-section::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,200,255,0.08) 0%, transparent 70%);
+  }
+
+  .final-section::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,255,157,0.06) 0%, transparent 70%);
+  }
+
+  .final-section h2 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .final-section p {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    max-width: 600px;
+    margin: 0 auto 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mistakes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: right;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mistake-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+
+  .mistake-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--danger), #ff7043);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  /* ──── TAGS ──── */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 32px 0;
+  }
+
+  .tag {
+    background: rgba(0,200,255,0.08);
+    border: 1px solid rgba(0,200,255,0.2);
+    color: var(--accent);
+    font-size: 0.8rem;
+    padding: 6px 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tag:hover {
+    background: rgba(0,200,255,0.2);
+    border-color: var(--accent);
+  }
+
+  /* ──── DIVIDER ──── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 20px 0;
+  }
+
+  /* ──── ANIMATIONS ──── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  @media (max-width: 600px) {
+    .toc-nav { display: none; }
+    .qual-cycle { grid-template-columns: 1fr; }
+    .qual-step:first-child { border-radius: 16px 16px 0 0; }
+    .qual-step:nth-child(2) { border-radius: 0; }
+    .qual-step:nth-child(3) { border-radius: 0; }
+    .qual-step:last-child { border-radius: 0 0 16px 16px; }
+    .pipe-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<!-- TOC Navigation -->
+<nav class="toc-nav" id="tocNav">
+  <div class="toc-dot active" data-section="0"><span class="toc-tooltip">المقدمة</span></div>
+  <div class="toc-dot" data-section="1"><span class="toc-tooltip">التلوث</span></div>
+  <div class="toc-dot" data-section="2"><span class="toc-tooltip">المناطق</span></div>
+  <div class="toc-dot" data-section="3"><span class="toc-tooltip">HVAC</span></div>
+  <div class="toc-dot" data-section="4"><span class="toc-tooltip">البناء</span></div>
+  <div class="toc-dot" data-section="5"><span class="toc-tooltip">المياه</span></div>
+  <div class="toc-dot" data-section="6"><span class="toc-tooltip">التحقق</span></div>
+  <div class="toc-dot" data-section="7"><span class="toc-tooltip">الخلاصة</span></div>
+</nav>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section class="hero" id="sec0">
+  <div class="hero-badge"><span></span> WHO-GMP دليل تفاعلي</div>
+  <h1>تصميم المصانع الدوائية<br><span class="highlight">وفق متطلبات منظمة الصحة العالمية</span></h1>
+  <p class="hero-sub">من الفكرة إلى المنشأة المعتمدة دولياً — دليلك الشامل في علم يجمع بين الهندسة والجودة وسلامة المريض</p>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num" id="counter1">0</span>
+      <span class="stat-label">معيار GMP رئيسي</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="counter2">0</span>
+      <span class="stat-label">منطقة تصنيع ISO</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="counter3">0</span>
+      <span class="stat-label">مراحل تحقق إلزامية</span>
+    </div>
+  </div>
+  <div class="scroll-hint">اسحب للأسفل</div>
+</section>
+
+<!-- ═══════════════════════ S1: CONTAMINATION ═══════════════════════ -->
+<section class="section" id="sec1">
+  <div class="section-number">01 / المبدأ الجوهري</div>
+  <h2 class="section-title">الوقاية من التلوث — ثالوث التصميم</h2>
+  <p class="section-lead">المبدأ الأول والأكثر أهمية في تصميم المصانع الدوائية هو أن كل قرار معماري يجب أن يُحارب أحد أنواع التلوث الثلاثة.</p>
+
+  <div class="who-quote">
+    <p>"التصميم يجب أن يُقلل من مخاطر الأخطاء ويُتيح التنظيف والصيانة الفعّالة لمنع التلوث المتقاطع وتراكم الغبار والأوساخ"</p>
+    <cite>— WHO Technical Report Series, No. 957, Annex 4</cite>
+  </div>
+
+  <div class="contam-grid">
+    <div class="contam-card" style="--card-color: #ff4d6d">
+      <span class="card-icon">⚗️</span>
+      <div class="card-title">تلوث متقاطع</div>
+      <div class="card-source">المصدر: انتقال مادة فعّالة من منتج لآخر</div>
+      <div class="card-solution">فصل المناطق المادي + تدفق هواء أحادي الاتجاه + ضغط تفاضلي بين الغرف</div>
+    </div>
+    <div class="contam-card" style="--card-color: #ffd166">
+      <span class="card-icon">🦠</span>
+      <div class="card-title">تلوث ميكروبي</div>
+      <div class="card-source">المصدر: البكتيريا والفطريات والجسيمات البيولوجية</div>
+      <div class="card-solution">غرف نظيفة (Cleanrooms) + فلاتر HEPA بكفاءة 99.97% + مراقبة بيئية مستمرة</div>
+    </div>
+    <div class="contam-card" style="--card-color: #00c8ff">
+      <span class="card-icon">💨</span>
+      <div class="card-title">تلوث جسيمي</div>
+      <div class="card-source">المصدر: جسيمات عالقة في الهواء من المواد والموظفين</div>
+      <div class="card-solution">أنظمة HVAC متخصصة + أسطح ملساء + زوايا منحنية تمنع تراكم الغبار</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ S2: ZONES ═══════════════════════ -->
+<section class="section" id="sec2">
+  <div class="section-number">02 / التخطيط المناطقي</div>
+  <h2 class="section-title">تدفق الحركة الأحادي وتقسيم المناطق</h2>
+  <p class="section-lead">يشترط WHO أن يكون تدفق المواد والموظفين والنفايات في اتجاه واحد. اضغط على أي منطقة لمعرفة تفاصيلها.</p>
+
+  <div class="zone-flow">
+    <div class="zone-row" style="--zone-color: #7f8c8d" onclick="toggleZone(this, 'z1')">
+      <span class="zone-badge" style="background:#7f8c8d">Zone 1</span>
+      <div class="zone-info">
+        <div class="zone-name">المنطقة العامة — Uncontrolled</div>
+        <div class="zone-desc">المداخل، المكاتب، غرف الاجتماعات</div>
+      </div>
+      <span class="zone-iso">لا قيود</span>
+    </div>
+    <div id="z1" class="pipe-detail">
+      <h4>🏢 المنطقة العامة</h4>
+      <p>لا تتطلب تحكماً خاصاً في البيئة. يُسمح للزوار وموظفي الإدارة بالدخول دون ملابس واقية خاصة. يجب أن تكون منفصلة تماماً عن مناطق الإنتاج بحواجز مادية وأنظمة تحكم في الوصول.</p>
+    </div>
+
+    <div class="water-arrow"></div>
+
+    <div class="zone-row" style="--zone-color: #3498db" onclick="toggleZone(this, 'z2')">
+      <span class="zone-badge" style="background:#3498db">Zone 2</span>
+      <div class="zone-info">
+        <div class="zone-name">المنطقة المتحكم بها — Controlled</div>
+        <div class="zone-desc">مخازن المواد الخام والمنتج النهائي</div>
+      </div>
+      <span class="zone-iso" style="color:#3498db">15°–25°C</span>
+    </div>
+    <div id="z2" class="pipe-detail">
+      <h4>📦 المنطقة المتحكم بها</h4>
+      <p>درجة الحرارة بين 15-25°C والرطوبة النسبية 40-60%. مراقبة مستمرة مع تسجيل البيانات. يلزم ارتداء ملابس واقية بسيطة (بالطو، قفازات). المواد تدخل عبر نظام airlock مزدوج.</p>
+    </div>
+
+    <div class="water-arrow"></div>
+
+    <div class="zone-row" style="--zone-color: #f39c12" onclick="toggleZone(this, 'z3')">
+      <span class="zone-badge" style="background:#f39c12">Zone 3</span>
+      <div class="zone-info">
+        <div class="zone-name">المنطقة النظيفة — Clean Area</div>
+        <div class="zone-desc">تحضير المنتجات غير المعقمة</div>
+      </div>
+      <span class="zone-iso" style="color:#f39c12">ISO 8 / Grade D</span>
+    </div>
+    <div id="z3" class="pipe-detail">
+      <h4>✨ المنطقة النظيفة (Grade D)</h4>
+      <p>يشترط ≤ 3,520,000 جسيم/م³ حجم 0.5 ميكرون. تهوية خاصة مع 20+ تجديد هواء/ساعة. ملابس واقية كاملة. تُستخدم لعمليات التحضير قبل التعبئة النهائية والمنتجات غير المعقمة.</p>
+    </div>
+
+    <div class="water-arrow"></div>
+
+    <div class="zone-row" style="--zone-color: #e74c3c" onclick="toggleZone(this, 'z4')">
+      <span class="zone-badge" style="background:#e74c3c">Zone 4</span>
+      <div class="zone-info">
+        <div class="zone-name">المنطقة فائقة النظافة — Cleanroom</div>
+        <div class="zone-desc">تصنيع الحقن والمنتجات المعقمة</div>
+      </div>
+      <span class="zone-iso" style="color:#e74c3c">ISO 5 / Grade A</span>
+    </div>
+    <div id="z4" class="pipe-detail">
+      <h4>💉 Cleanroom Grade A — أشد المعايير صرامة</h4>
+      <p>يشترط ≤ 3,520 جسيم/م³ فقط. تدفق هواء أحادي لامinar flow بسرعة 0.36-0.54 م/ثانية. فلاتر HEPA مزدوجة. درجة حرارة 18-22°C ورطوبة 30-50%. بدلات معقمة كاملة. مراقبة بيئية كل 30 دقيقة.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ S3: HVAC ═══════════════════════ -->
+<section class="section" id="sec3">
+  <div class="section-number">03 / أنظمة HVAC</div>
+  <h2 class="section-title">العمود الفقري للمصنع الدوائي</h2>
+  <p class="section-lead">نظام التدفئة والتهوية وتكييف الهواء هو الأكثر تأثيراً على قرار الاعتماد. إليك معايير ISO 14644 الكاملة:</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>درجة النظافة</th>
+        <th>الاستخدام</th>
+        <th>الجسيمات / م³ (0.5µm)</th>
+        <th>الحالة الميكروبية</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="grade-a">ISO 5 / Grade A</span></td>
+        <td>التعبئة المعقمة المكشوفة</td>
+        <td>≤ 3,520</td>
+        <td>&lt; 1 CFU/م³</td>
+      </tr>
+      <tr>
+        <td><span class="grade-b">ISO 6 / Grade B</span></td>
+        <td>خلفية Grade A للتعقيم</td>
+        <td>≤ 35,200</td>
+        <td>≤ 10 CFU/م³</td>
+      </tr>
+      <tr>
+        <td><span class="grade-c">ISO 7 / Grade C</span></td>
+        <td>تحضير المحاليل القابلة للترشيح</td>
+        <td>≤ 352,000</td>
+        <td>≤ 100 CFU/م³</td>
+      </tr>
+      <tr>
+        <td><span class="grade-d">ISO 8 / Grade D</span></td>
+        <td>أعمال أقل حساسية</td>
+        <td>≤ 3,520,000</td>
+        <td>≤ 200 CFU/م³</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="checklist">
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-icon">✓</div>
+      <div class="check-text">معدل تجديد الهواء ≥ 20 دورة/ساعة في المناطق المتحكمة</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-icon">✓</div>
+      <div class="check-text">فلاتر HEPA بكفاءة 99.97% لجسيمات 0.3 ميكرون</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-icon">✓</div>
+      <div class="check-text">ضغط تفاضلي 10-15 Pascal بين المناطق المختلفة</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-icon">✓</div>
+      <div class="check-text">مراقبة مستمرة للحرارة والرطوبة والضغط 24/7</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-icon">✓</div>
+      <div class="check-text">اختبار نزاهة فلاتر HEPA كل 6 أشهر على الأقل</div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <div class="check-icon">✓</div>
+      <div class="check-text">توثيق كامل لجميع قراءات أنظمة HVAC مع تاريخ ووقت</div>
+    </div>
+  </div>
+  <p style="font-size:0.8rem; color:var(--muted); text-align:center;">اضغط على كل بند للتحقق منه ✓</p>
+</section>
+
+<!-- ═══════════════════════ S4: MATERIALS ═══════════════════════ -->
+<section class="section" id="sec4">
+  <div class="section-number">04 / مواد البناء</div>
+  <h2 class="section-title">التشطيبات الداخلية — لا مساومة على الأسطح</h2>
+  <p class="section-lead">كل سطح في مناطق التصنيع هو خط دفاع ضد التلوث. يشترط WHO 5 خصائص لا تُتنازل عنها:</p>
+
+  <div class="pipeline" id="materialPipeline">
+    <div class="pipe-step" onclick="showMaterial('mat1', this)">
+      <div class="step-icon">🏗️</div>
+      <div class="step-name">الأرضيات</div>
+      <div class="step-sub">Floor Systems</div>
+    </div>
+    <div class="pipe-arrow">›</div>
+    <div class="pipe-step" onclick="showMaterial('mat2', this)">
+      <div class="step-icon">🧱</div>
+      <div class="step-name">الجدران</div>
+      <div class="step-sub">Wall Systems</div>
+    </div>
+    <div class="pipe-arrow">›</div>
+    <div class="pipe-step" onclick="showMaterial('mat3', this)">
+      <div class="step-icon">🔲</div>
+      <div class="step-name">الأسقف</div>
+      <div class="step-sub">Ceiling</div>
+    </div>
+    <div class="pipe-arrow">›</div>
+    <div class="pipe-step" onclick="showMaterial('mat4', this)">
+      <div class="step-icon">🚪</div>
+      <div class="step-name">الأبواب</div>
+      <div class="step-sub">Doors</div>
+    </div>
+    <div class="pipe-arrow">›</div>
+    <div class="pipe-step" onclick="showMaterial('mat5', this)">
+      <div class="step-icon">🔄</div>
+      <div class="step-name">الزوايا</div>
+      <div class="step-sub">Coved Corners</div>
+    </div>
+  </div>
+
+  <div id="mat1" class="pipe-detail">
+    <h4>🏗️ الأرضيات — Floor Systems</h4>
+    <p>الخيار الأمثل: <strong style="color:var(--accent)">إيبوكسي (Epoxy) أو Polyurethane (PU) Screed</strong> بسماكة 3-6 مم. يجب أن يكون مضاداً للانزلاق، مقاوماً للمواد الكيميائية، وسهل التنظيف بالمطهرات القوية. لا شقوق ولا مفاصل في مناطق Grade C وما فوق.</p>
+  </div>
+  <div id="mat2" class="pipe-detail">
+    <h4>🧱 الجدران — Wall Systems</h4>
+    <p>الخيار الأمثل: <strong style="color:var(--accent)">ألواح Sandwich Panel</strong> أو طلاء إيبوكسي بطبقتين. يجب أن يكون السطح أبيض ناعم لمساعدة الإضاءة والكشف السريع عن الأوساخ. مقاومة للرطوبة والتآكل الكيميائي.</p>
+  </div>
+  <div id="mat3" class="pipe-detail">
+    <h4>🔲 الأسقف — Flush Ceiling</h4>
+    <p>يُشترط <strong style="color:var(--accent)">سقف مغلق بالكامل (Flush Ceiling)</strong> دون فجوات أو ثغرات. جميع تمريرات الأنابيب والكابلات مختومة. الإضاءة مدفونة بحواجز مانعة للغبار. لا أسقف معلقة مفتوحة في مناطق الإنتاج.</p>
+  </div>
+  <div id="mat4" class="pipe-detail">
+    <h4>🚪 الأبواب — Door Systems</h4>
+    <p><strong style="color:var(--accent)">أبواب ذاتية الإغلاق</strong> مع حشوات مانعة للتسرب من جميع الاتجاهات. في Grade A/B يُستخدم نظام interlocking (لا يمكن فتح باب قبل إغلاق الآخر). مقبض غير مجوف لمنع تراكم الغبار.</p>
+  </div>
+  <div id="mat5" class="pipe-detail">
+    <h4>🔄 الزوايا المنحنية — Coved Corners</h4>
+    <p>من أهم متطلبات WHO: <strong style="color:var(--accent)">جميع زوايا الجدار/الأرضية منحنية (Coved)</strong> بنصف قطر ≥ 5 سم. يمنع تراكم الغبار والميكروبات في الزوايا الحادة. يُطبق أيضاً على تقاطعات الجدران مع بعضها.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════ S5: WATER ═══════════════════════ -->
+<section class="section" id="sec5">
+  <div class="section-number">05 / أنظمة المياه</div>
+  <h2 class="section-title">الماء في الصناعة الدوائية — مادة خام أولى</h2>
+  <p class="section-lead">الماء ليس مجرد مرفق — بل مادة خام تخضع لأشد معايير الجودة. اضغط على كل مرحلة لمعرفة المواصفات:</p>
+
+  <div class="water-flow">
+    <div class="water-stage" style="--stage-color:#7f8c8d" onclick="showWater('w1', this)">
+      <div class="stage-label">المرحلة الأولى</div>
+      <div class="stage-name">ماء الصنبور (Potable Water)</div>
+      <div class="stage-spec">مطابق لمعايير منظمة الصحة العالمية للشرب</div>
+    </div>
+    <div id="w1" class="pipe-detail" style="width:100%">
+      <h4>💧 ماء الصنبور</h4>
+      <p>يُستخدم فقط في عمليات التنظيف الأولية وتبريد المعدات والأعمال غير الإنتاجية. لا يجوز استخدامه في إنتاج أي منتج دوائي مباشرة دون معالجة.</p>
+    </div>
+
+    <div class="water-arrow"></div>
+
+    <div class="water-stage" style="--stage-color:#3498db" onclick="showWater('w2', this)">
+      <div class="stage-label">المرحلة الثانية</div>
+      <div class="stage-name">ماء منقى (Purified Water - PW)</div>
+      <div class="stage-spec">موصلية ≤ 1.3 µS/cm | TOC ≤ 500 ppb</div>
+    </div>
+    <div id="w2" class="pipe-detail" style="width:100%">
+      <h4>🔵 ماء منقى (PW)</h4>
+      <p>ينتج عبر Reverse Osmosis + EDI أو التقطير. يُستخدم في أشكال الجرعات غير المعقمة والأدوات والمعدات. يسري في Loop مغلق من الفولاذ المقاوم للصدأ 316L بسرعة ≥ 1 م/ثانية لمنع الركود.</p>
+    </div>
+
+    <div class="water-arrow"></div>
+
+    <div class="water-stage" style="--stage-color:#e74c3c" onclick="showWater('w3', this)">
+      <div class="stage-label">المرحلة الثالثة</div>
+      <div class="stage-name">ماء للحقن (WFI)</div>
+      <div class="stage-spec">موصلية ≤ 1.1 µS/cm | Endotoxin ≤ 0.25 EU/ml</div>
+    </div>
+    <div id="w3" class="pipe-detail" style="width:100%">
+      <h4>💉 ماء للحقن (Water for Injection)</h4>
+      <p>أعلى درجات جودة المياه الدوائية. ينتج عبر التقطير المتعدد أو Membrane Systems (وفق تعديل WHO 2017). يُسخن ≥ 80°C لمنع تكاثر البكتيريا، أو يُبرد ≤ 4°C في أنابيب مُعزولة. مراقبة Endotoxin يومياً.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ S6: QUALIFICATION ═══════════════════════ -->
+<section class="section" id="sec6">
+  <div class="section-number">06 / دورة التحقق</div>
+  <h2 class="section-title">Qualification & Validation — إثبات الجدارة</h2>
+  <p class="section-lead">التصميم الجيد وحده لا يكفي — يجب إثبات موثق أن المصنع يؤدي وظيفته. اضغط على كل مرحلة:</p>
+
+  <div class="qual-cycle">
+    <div class="qual-step" onclick="activateQual(this)">
+      <span class="qual-code">DQ</span>
+      <div class="qual-title">تحقق التصميم</div>
+      <div class="qual-desc">Design Qualification — التحقق من أن التصميم يلبي متطلبات GMP قبل بدء البناء. مراجعة المخططات والمواصفات التقنية.</div>
+    </div>
+    <div class="qual-step" onclick="activateQual(this)">
+      <span class="qual-code">IQ</span>
+      <div class="qual-title">تحقق التركيب</div>
+      <div class="qual-desc">Installation Qualification — التحقق من صحة تركيب جميع المعدات وأنظمة الخدمات وفق المواصفات المعتمدة.</div>
+    </div>
+    <div class="qual-step" onclick="activateQual(this)">
+      <span class="qual-code">OQ</span>
+      <div class="qual-title">تحقق التشغيل</div>
+      <div class="qual-desc">Operational Qualification — التحقق من أن المعدات تعمل ضمن حدودها التصميمية عبر اختبارات منهجية موثقة.</div>
+    </div>
+    <div class="qual-step" onclick="activateQual(this)">
+      <span class="qual-code">PQ</span>
+      <div class="qual-title">تحقق الأداء</div>
+      <div class="qual-desc">Performance Qualification — التحقق من الأداء الكامل في ظروف الإنتاج الحقيقية ومع المنتجات الفعلية أو الموديلات.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ S7: CONCLUSION ═══════════════════════ -->
+<section class="section" id="sec7">
+  <div class="final-section">
+    <h2>🎯 ما الذي يُفرق بين مصنع معتمد ومصنع مرفوض؟</h2>
+    <p>بعد سنوات من دراسة هذا المجال، المصانع التي تفشل في نيل الاعتماد تُخطئ في واحدة من هذه الثلاث:</p>
+
+    <div class="mistakes-list">
+      <div class="mistake-item">
+        <div class="mistake-num">1</div>
+        <div>التصميم يأتي <strong>بعد</strong> البناء — بدلاً من أن يقوده. كل متر مكعب يُبنى قبل الحصول على موافقة هيئة تنظيمية هو خسارة مضمونة.</div>
+      </div>
+      <div class="mistake-item">
+        <div class="mistake-num">2</div>
+        <div>التوفير في <strong>أنظمة HVAC والمياه</strong> — هذان النظامان يمثلان 30-40% من تكلفة المصنع ولكنهما يتحكمان في 80% من قرار الاعتماد.</div>
+      </div>
+      <div class="mistake-item">
+        <div class="mistake-num">3</div>
+        <div>غياب <strong>التوثيق من اليوم الأول</strong> — الـ GMP ليست فقط مباني جميلة، بل ثقافة توثيق لكل قرار من أول رسمة هندسية.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tags">
+    <span class="tag">#الصناعة_الدوائية</span>
+    <span class="tag">#GMP</span>
+    <span class="tag">#WHO</span>
+    <span class="tag">#تصميم_المصانع</span>
+    <span class="tag">#Pharmaceutical</span>
+    <span class="tag">#CleanRoom</span>
+    <span class="tag">#HVAC</span>
+    <span class="tag">#PharmaceuticalEngineering</span>
+    <span class="tag">#ضمان_الجودة</span>
+    <span class="tag">#QualityAssurance</span>
+  </div>
+
+  <p style="text-align:center; color:var(--muted); font-size:0.85rem; margin-top:20px;">
+    💬 <strong style="color:var(--text)">هل أنت تعمل في هذا المجال؟</strong><br>
+    ما أكبر تحدٍّ واجهته في تصميم أو تشغيل منشأة دوائية؟
+  </p>
+</section>
+
+<script>
+  // ── Progress Bar ──
+  window.addEventListener('scroll', () => {
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+
+    // TOC dots
+    const sections = ['sec0','sec1','sec2','sec3','sec4','sec5','sec6','sec7'];
+    sections.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const dot = document.querySelectorAll('.toc-dot')[i];
+      if (rect.top < window.innerHeight/2 && rect.bottom > window.innerHeight/2) {
+        document.querySelectorAll('.toc-dot').forEach(d => d.classList.remove('active'));
+        if (dot) dot.classList.add('active');
+      }
+    });
+  });
+
+  // ── TOC click ──
+  document.querySelectorAll('.toc-dot').forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      const sections = ['sec0','sec1','sec2','sec3','sec4','sec5','sec6','sec7'];
+      document.getElementById(sections[i])?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // ── Intersection Observer for section reveal ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+  // ── Counters ──
+  function animateCounter(id, target, suffix='') {
+    let count = 0;
+    const el = document.getElementById(id);
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      count = Math.min(count + step, target);
+      el.textContent = count + suffix;
+      if (count >= target) clearInterval(timer);
+    }, 30);
+  }
+
+  setTimeout(() => {
+    animateCounter('counter1', 8, '+');
+    animateCounter('counter2', 4, '');
+    animateCounter('counter3', 4, '');
+  }, 800);
+
+  // ── Toggle zone details ──
+  function toggleZone(row, id) {
+    const detail = document.getElementById(id);
+    const isOpen = detail.classList.contains('show');
+    document.querySelectorAll('.pipe-detail').forEach(d => d.classList.remove('show'));
+    if (!isOpen) detail.classList.add('show');
+  }
+
+  // ── Material pipeline ──
+  function showMaterial(id, btn) {
+    document.querySelectorAll('.pipe-step').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    const mats = ['mat1','mat2','mat3','mat4','mat5'];
+    mats.forEach(m => {
+      const el = document.getElementById(m);
+      if (el) el.classList.remove('show');
+    });
+    const target = document.getElementById(id);
+    if (target) target.classList.add('show');
+  }
+
+  // ── Water stages ──
+  function showWater(id, card) {
+    const waters = ['w1','w2','w3'];
+    waters.forEach(w => {
+      const el = document.getElementById(w);
+      if (el) el.classList.remove('show');
+    });
+    document.getElementById(id)?.classList.add('show');
+  }
+
+  // ── Qualification cycle ──
+  function activateQual(el) {
+    document.querySelectorAll('.qual-step').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ── Checklist ──
+  function toggleCheck(item) {
+    item.classList.toggle('checked');
+  }
+</script>
+</body>
+</html>
